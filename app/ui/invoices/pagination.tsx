@@ -5,16 +5,29 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { generatePagination } from '@/app/lib/utils';
 
-export default function Pagination({ totalPages }: { totalPages: number }) {
+export default function Pagination({
+  totalPages,
+  searchParams,
+}: {
+  totalPages: number;
+  searchParams?: {
+    query?: string;
+    page?: string;
+  };
+}) {
+  const currentPage = Number(searchParams?.page) || 1;
   // NOTE: comment in this code when you get to this point in the course
 
-  // const allPages = generatePagination(currentPage, totalPages);
+  const allPages = generatePagination(currentPage, totalPages);
+  const createPageURL = (pageNumber: number | string) => {
+    const params = new URLSearchParams(searchParams);
+    params.set('page', pageNumber.toString());
+    return `?${params.toString()}`;
+  };
 
   return (
     <>
-      {/* NOTE: comment in this code when you get to this point in the course */}
-
-      {/* <div className="inline-flex">
+      <div className="inline-flex">
         <PaginationArrow
           direction="left"
           href={createPageURL(currentPage - 1)}
@@ -47,7 +60,7 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
           href={createPageURL(currentPage + 1)}
           isDisabled={currentPage >= totalPages}
         />
-      </div> */}
+      </div>
     </>
   );
 }
